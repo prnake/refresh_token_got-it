@@ -529,6 +529,12 @@
 
                     log('Token 换取成功。', 'success');
                     log(`用户邮箱：${data.data.user_email || '未知'}`, 'info');
+                    const cv = data.data.cyber_verification;
+                    if (cv && cv.metadata && cv.metadata.verification_status) {
+                        log(`Cyber 验证状态：${cv.metadata.verification_status}`, 'info');
+                    } else if (cv && cv.error) {
+                        log(`Cyber 验证状态获取失败：${cv.error}`, 'warn');
+                    }
                     log('Token JSON 数据已就绪，点击"复制 JSON"复制。', 'success');
                 } else {
                     const extra = data?.error?.error_description || data?.error?.message || '';

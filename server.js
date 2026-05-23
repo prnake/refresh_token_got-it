@@ -84,6 +84,31 @@ async function parseJsonResponse(response) {
   }
 }
 
+async function fetchCyberVerificationStatus(accessToken) {
+  try {
+    const res = await fetch('https://chatgpt.com/backend-api/cyber_verification/refresh_status', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+        'Accept': '*/*',
+        'Origin': 'https://chatgpt.com',
+        'Referer': 'https://chatgpt.com/cyber',
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36'
+      },
+      body: JSON.stringify({ inquiry_id: null })
+    });
+
+    if (!res.ok) {
+      return { ok: false, status: res.status };
+    }
+    const data = await parseJsonResponse(res);
+    return { ok: true, data };
+  } catch (err) {
+    return { ok: false, error: err.message };
+  }
+}
+
 // 路由处理
 async function handleGenerateAuthUrl(req, res) {
   try {
@@ -159,6 +184,8 @@ async function handleExchangeCode(req, res) {
     const payload = decodeJwtPayload(tokenData.id_token);
     OAUTH_SESSIONS.delete(String(sessionId));
 
+    const cyber = await fetchCyberVerificationStatus(tokenData.access_token);
+
     return sendJson(res, 200, {
       success: true,
       data: {
@@ -167,7 +194,8 @@ async function handleExchangeCode(req, res) {
         access_token: tokenData.access_token,
         expires_in: tokenData.expires_in,
         client_id: clientId,
-        user_email: payload.email 
+        user_email: payload.email,
+        cyber_verification: cyber.ok ? cyber.data : { error: cyber.error || `HTTP ${cyber.status}` }
       }
     });
   } catch (err) {
