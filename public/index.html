@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TOKEN_EXTRACTOR // SYSTEM</title>
+    <title>Token 提取器 // 系统</title>
     <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -117,7 +117,7 @@
         }
         
         .terminal-panel::before {
-            content: "SYSTEM_LOG // OUTPUT_STREAM";
+            content: "系统日志 // 输出流";
             position: absolute;
             top: 0;
             left: 0;
@@ -295,9 +295,9 @@
     <div class="scanlines"></div>
 
     <header>
-        <div class="brand">TOKEN_EXTRACTOR <span style="font-size:0.5em; opacity:0.7">v2.1</span></div>
+        <div class="brand">TOKEN 提取器 <span style="font-size:0.5em; opacity:0.7">v2.1</span></div>
         <div class="status-indicator">
-            SYSTEM ONLINE <div class="blink"></div>
+            系统在线 <div class="blink"></div>
         </div>
     </header>
 
@@ -305,19 +305,20 @@
         <div class="control-panel">
             
             <section id="step1">
-                <h2>STEP 01 // INITIALIZE_AUTH</h2>
+                <h2>步骤 01 // 初始化授权</h2>
                 <div style="display: flex; gap: 20px; align-items: flex-end;">
                     <button id="genBtn" class="btn">生成授权链接</button>
                     <div class="input-wrapper" style="flex: 1; display: none;" id="authUrlWrapper">
                         <input type="text" id="authUrl" readonly value="">
-                        <button class="btn btn-copy" onclick="copy('authUrl', 'AUTH_URL')">复制</button>
+                        <button class="btn btn-copy" id="openAuthBtn" onclick="openAuthUrl()">打开</button>
+                        <button class="btn btn-copy" onclick="copy('authUrl', '授权链接')">复制</button>
                     </div>
                 </div>
             </section>
 
             <section id="step2">
-                <h2>STEP 02 // INJECT_CALLBACK</h2>
-                <p style="color: #666; font-size: 12px; margin-bottom: 10px;">> WAITING FOR USER INPUT...</p>
+                <h2>步骤 02 // 注入回调</h2>
+                <p style="color: #666; font-size: 12px; margin-bottom: 10px;">> 等待用户输入...</p>
                 <div class="input-wrapper">
                     <input type="text" id="callbackUrl" placeholder="在此粘贴 http://localhost:1455/... 完整链接">
                     <button class="btn btn-copy" onclick="clearInput()">清空</button>
@@ -328,65 +329,60 @@
             </section>
 
             <section id="resultArea" class="hidden result-box">
-                <h2 style="color: var(--success-color)">>> OPERATION SUCCESSFUL</h2>
+                <h2 style="color: var(--success-color)">>> 操作成功</h2>
 
-                <div style="margin-bottom: 15px;">
-                    <label style="font-size: 12px; color: var(--accent-color); font-weight: bold;">CLIENT_ID</label>
-                    <div class="input-wrapper">
-                        <input type="text" id="clientId" readonly style="color: var(--accent-color);">
-                        <button class="btn btn-copy" onclick="copy('clientId', 'CLIENT_ID')">复制</button>
-                    </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <label style="font-size: 12px; color: var(--success-color); font-weight: bold;">TOKEN 数据 // JSON</label>
+                    <button class="btn btn-copy" onclick="copyJson()">复制 JSON</button>
                 </div>
-                
-                <div style="margin-bottom: 15px;">
-                    <label style="font-size: 12px; color: var(--success-color); font-weight: bold;">REFRESH_TOKEN</label>
-                    <div class="input-wrapper">
-                        <input type="text" id="refreshToken" readonly style="color: var(--success-color);">
-                        <button class="btn btn-copy" onclick="copy('refreshToken', 'REFRESH_TOKEN')">复制</button>
-                    </div>
-                </div>
-                
-                <div style="margin-bottom: 15px;">
-                    <label style="font-size: 12px; color: var(--primary-color); font-weight: bold;">ACCESS_TOKEN</label>
-                    <div class="input-wrapper">
-                        <input type="text" id="accessToken" readonly style="color: var(--primary-color);">
-                        <button class="btn btn-copy" onclick="copy('accessToken', 'ACCESS_TOKEN')">复制</button>
-                    </div>
-                </div>
+                <textarea id="tokenJson" readonly style="
+                    width: 100%;
+                    min-height: 220px;
+                    background: rgba(0, 0, 0, 0.6);
+                    border: 1px solid var(--success-color);
+                    color: var(--success-color);
+                    font-family: 'Consolas', 'Monaco', monospace;
+                    font-size: 13px;
+                    padding: 15px;
+                    outline: none;
+                    resize: vertical;
+                    line-height: 1.5;
+                    box-shadow: inset 0 0 10px rgba(10, 255, 0, 0.1);
+                "></textarea>
             </section>
         </div>
 
         <div class="terminal-panel" id="terminal">
             <div class="log-entry">
-                <span class="log-time">[SYSTEM]</span>
-                <span class="log-info">Interface initialized.</span>
+                <span class="log-time">[系统]</span>
+                <span class="log-info">界面已初始化。</span>
             </div>
             <div class="log-entry">
-                <span class="log-time">[SYSTEM]</span>
-                <span class="log-info">Connected to server at port 3000.</span>
+                <span class="log-time">[系统]</span>
+                <span class="log-info">已连接到服务器（端口 3000）。</span>
             </div>
             <div class="log-entry">
-                <span class="log-time">[SYSTEM]</span>
-                <span class="log-info">Waiting for user command...</span>
+                <span class="log-time">[系统]</span>
+                <span class="log-info">等待用户指令...</span>
             </div>
         </div>
     </main>
 
     <footer>
-        ZEABUR_DEPLOYMENT // SECURE_CONNECTION // UNAUTHORIZED_ACCESS_PROHIBITED
+        ZEABUR 部署 // 安全连接 // 严禁未授权访问
     </footer>
 
     <script>
         let sessionId = localStorage.getItem('oauth_session_id');
         const DEFAULT_CLIENT_ID = 'app_EMoamEEZ73f0CkXaXp7hrann';
 
-        // 日志系统 (保持英文)
+        // 日志系统
         function log(msg, type = 'info') {
             const terminal = document.getElementById('terminal');
             const entry = document.createElement('div');
             entry.className = 'log-entry';
-            
-            const time = new Date().toLocaleTimeString('en-US', {hour12: false});
+
+            const time = new Date().toLocaleTimeString('zh-CN', {hour12: false});
             let typeClass = 'log-info';
             if (type === 'success') typeClass = 'log-success';
             if (type === 'error') typeClass = 'log-error';
@@ -394,22 +390,42 @@
 
             entry.innerHTML = `<span class="log-time">[${time}]</span><span class="${typeClass}">${msg}</span>`;
             terminal.appendChild(entry);
-            terminal.scrollTop = terminal.scrollHeight; // Auto scroll
+            terminal.scrollTop = terminal.scrollHeight;
         }
 
         function copy(id, name) {
             const el = document.getElementById(id);
             el.select();
             navigator.clipboard.writeText(el.value).then(() => {
-                log(`Clipboard updated: ${name} copied.`, 'success');
+                log(`已复制到剪贴板：${name}。`, 'success');
             }).catch(err => {
-                log(`Clipboard error: ${err}`, 'error');
+                log(`剪贴板错误：${err}`, 'error');
             });
+        }
+
+        function copyJson() {
+            const el = document.getElementById('tokenJson');
+            el.select();
+            navigator.clipboard.writeText(el.value).then(() => {
+                log('已复制到剪贴板：TOKEN JSON 数据。', 'success');
+            }).catch(err => {
+                log(`剪贴板错误：${err}`, 'error');
+            });
+        }
+
+        function openAuthUrl() {
+            const url = document.getElementById('authUrl').value;
+            if (!url) {
+                log('没有可打开的授权链接。', 'error');
+                return;
+            }
+            window.open(url, '_blank', 'noopener,noreferrer');
+            log('已在新标签页打开授权链接。', 'info');
         }
 
         function clearInput() {
             document.getElementById('callbackUrl').value = '';
-            log('Input field cleared.', 'warn');
+            log('输入框已清空。', 'warn');
         }
 
 
@@ -421,7 +437,7 @@
                 return JSON.parse(rawText);
             } catch {
                 const snippet = rawText.slice(0, 180).replace(/\s+/g, ' ').trim();
-                throw new Error(`Server returned non-JSON response (HTTP ${res.status}): ${snippet}`);
+                throw new Error(`服务器返回非 JSON 响应（HTTP ${res.status}）：${snippet}`);
             }
         }
 
@@ -430,9 +446,7 @@
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.has('code')) {
                 document.getElementById('callbackUrl').value = window.location.href;
-                log('Callback detected automatically. Ready to extract.', 'success');
-                // 自动触发提取 (可选)
-                // document.getElementById('extractBtn').click();
+                log('已自动检测到回调，可以开始提取。', 'success');
             }
         };
 
@@ -440,7 +454,7 @@
         document.getElementById('genBtn').onclick = async () => {
             const btn = document.getElementById('genBtn');
             btn.disabled = true;
-            log('Initiating authentication sequence...', 'info');
+            log('正在启动授权流程...', 'info');
 
             try {
                 const res = await fetch('/api/generate-auth-url', {
@@ -449,20 +463,20 @@
                     body: JSON.stringify({})
                 });
                 const data = await parseApiResponse(res);
-                
+
                 if (data.success) {
                     document.getElementById('authUrl').value = data.data.authUrl;
                     document.getElementById('authUrlWrapper').style.display = 'flex';
                     sessionId = data.data.sessionId;
                     localStorage.setItem('oauth_session_id', sessionId);
-                    
-                    log('Session ID generated: ' + sessionId.substring(0, 8) + '...', 'info');
-                    log('Auth URL generated successfully.', 'success');
+
+                    log('已生成会话 ID：' + sessionId.substring(0, 8) + '...', 'info');
+                    log('授权链接生成成功。', 'success');
                 } else {
-                    log('Server error: ' + data.message, 'error');
+                    log('服务器错误：' + data.message, 'error');
                 }
-            } catch(e) { 
-                log('Network connection failed.', 'error');
+            } catch(e) {
+                log('网络连接失败。', 'error');
             } finally {
                 btn.disabled = false;
             }
@@ -472,12 +486,12 @@
         document.getElementById('extractBtn').onclick = async () => {
             const urlStr = document.getElementById('callbackUrl').value.trim();
             if (!urlStr) {
-                log('Error: Callback URL is empty.', 'error');
+                log('错误：回调链接为空。', 'error');
                 return;
             }
-            
-            log('Parsing callback data...', 'info');
-            
+
+            log('正在解析回调数据...', 'info');
+
             try {
                 let code = '';
                 if (urlStr.includes('code=')) {
@@ -493,11 +507,11 @@
                 }
 
                 if(!code) {
-                    log('Error: Invalid auth code format.', 'error');
+                    log('错误：授权码格式无效。', 'error');
                     return;
                 }
 
-                log('Exchanging code for token...', 'info');
+                log('正在用授权码换取 Token...', 'info');
 
                 const res = await fetch('/api/exchange-code', {
                     method: 'POST',
@@ -505,29 +519,26 @@
                     body: JSON.stringify({ code, sessionId })
                 });
                 const data = await parseApiResponse(res);
-                
+
                 if (data.success) {
-                    document.getElementById('clientId').value = data.data.client_id || DEFAULT_CLIENT_ID;
-                    document.getElementById('refreshToken').value = data.data.refresh_token;
-                    // 新增 Access Token 赋值
-                    document.getElementById('accessToken').value = data.data.access_token || 'N/A';
-                    
+                    const payload = { ...data.data };
+                    if (!payload.client_id) payload.client_id = DEFAULT_CLIENT_ID;
+
+                    document.getElementById('tokenJson').value = JSON.stringify(payload, null, 2);
                     document.getElementById('resultArea').classList.remove('hidden');
-                    
-                    log('Token exchange successful.', 'success');
-                    log('Client ID ready (from OAuth app config).', 'success');
-                    log(`User Email: ${data.data.user_email || 'Unknown'}`, 'info');
-                    log('Refresh token secured.', 'success');
-                    log('Access token secured.', 'success');
+
+                    log('Token 换取成功。', 'success');
+                    log(`用户邮箱：${data.data.user_email || '未知'}`, 'info');
+                    log('Token JSON 数据已就绪，点击"复制 JSON"复制。', 'success');
                 } else {
                     const extra = data?.error?.error_description || data?.error?.message || '';
-                    log('Exchange failed: ' + data.message + (extra ? ` | ${extra}` : ''), 'error');
+                    log('换取失败：' + data.message + (extra ? ` | ${extra}` : ''), 'error');
                     if (res.status === 429) {
-                        log('429 rate limit from OpenAI. Please retry later, or configure OPENAI_CLIENT_ID/OPENAI_PROXY.', 'warn');
+                        log('OpenAI 返回 429（请求过于频繁），请稍后重试，或配置 OPENAI_CLIENT_ID/OPENAI_PROXY。', 'warn');
                     }
                 }
-            } catch(e) { 
-                log('Critical process error: ' + e.message, 'error');
+            } catch(e) {
+                log('严重流程错误：' + e.message, 'error');
             }
         };
     </script>
