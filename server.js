@@ -181,7 +181,16 @@ async function handleExchangeCode(req, res) {
       return sendJson(res, statusCode, { success: false, message, error: tokenData });
     }
 
-    const payload = decodeJwtPayload(tokenData.id_token);
+    const idPayload = decodeJwtPayload(tokenData.id_token);
+    let accessPayload = {};
+    try { accessPayload = decodeJwtPayload(tokenData.access_token); } catch {}
+
+    const auth = accessPayload['https://api.openai.com/auth'] || {};
+    const account_id = auth.chatgpt_account_id || idPayload['https://api.openai.com/auth']?.chatgpt_account_id || null;
+    const account_user_id = auth.chatgpt_account_user_id || null;
+    const user_id = auth.chatgpt_user_id || accessPayload.user_id || null;
+    const plan_type = auth.chatgpt_plan_type || null;
+
     OAUTH_SESSIONS.delete(String(sessionId));
 
     const cyber = await fetchCyberVerificationStatus(tokenData.access_token);
@@ -194,7 +203,11 @@ async function handleExchangeCode(req, res) {
         access_token: tokenData.access_token,
         expires_in: tokenData.expires_in,
         client_id: clientId,
-        user_email: payload.email,
+        account_id,
+        account_user_id,
+        user_id,
+        plan_type,
+        user_email: idPayload.email,
         cyber_verification: cyber.ok ? cyber.data : { error: cyber.error || `HTTP ${cyber.status}` }
       }
     });
